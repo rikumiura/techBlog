@@ -1,0 +1,20 @@
+{
+    "name": "tech blog - remix on hono",
+    "dockerComposeFile": "./docker-compose.yml",
+    "service": "web",
+    "workspaceFolder": "/workspace",
+    "remoteUser": "root",
+    "shutdownAction": "stopCompose",
+    "overrideCommand": false,
+    "postCreateCommand": "echo 'Container ready'",
+    "initializeCommand": "echo 'Initializing...'",
+    "waitFor": "postCreateCommand",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "biomejs.biome",
+                "MS-CEINTL.vscode-language-pack-ja"
+            ]
+        }
+    }
+}
