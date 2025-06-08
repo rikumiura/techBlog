@@ -1,12 +1,12 @@
 {
     "name": "tech blog - remix on hono",
-    "dockerComposeFile": "./docker-compose.yml",
+    "dockerComposeFile": "./docker-compose.yaml",
     "service": "web",
     "workspaceFolder": "/workspace",
-    "remoteUser": "root",
+    "remoteUser": "node",
     "shutdownAction": "stopCompose",
-    "overrideCommand": false,
-    "postCreateCommand": "echo 'Container ready'",
+    "overrideCommand": true,
+    "postCreateCommand": "if [ -f package.json ]; then chmod +x .devcontainer/setup.sh && ./.devcontainer/setup.sh; else echo 'package.json not found, skipping setup'; fi",
     "initializeCommand": "echo 'Initializing...'",
     "waitFor": "postCreateCommand",
     "customizations": {

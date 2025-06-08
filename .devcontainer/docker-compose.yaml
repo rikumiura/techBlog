@@ -1,22 +1,25 @@
 services:
-    web:
-      container_name: 'blog'
-      hostname: 'vite'
-      build:
-        context: ../  
-        dockerfile: ./workspace/.devcontainer/Dockerfile
-      working_dir: '/workspace'
-      tty: true
-      stdin_open: true  # この行を追加
-      command: ["tail", "-f", "/dev/null"]
-      mem_limit: 4g
-      security_opt:  # この設定を追加
-        - seccomp:unconfined
-      ports:
+  web:
+    container_name: 'blog'
+    hostname: 'blog'
+    build:
+      context: ../workspace
+      dockerfile: ../.devcontainer/Dockerfile
+    working_dir: '/workspace'
+    tty: true
+    stdin_open: true
+    user: "node"
+    command: ["sh", "-c", "while true; do sleep 30; done"]
+    mem_limit: 4g
+    security_opt:
+      - seccomp:unconfined
+    ports:
       - 3000:3000
-      - 5173:5175
+      - 5173:5173
       - 8080:8080
-      volumes:
+    volumes:
       - type: bind
         source: ../workspace
         target: /workspace
+    environment:
+      - NODE_ENV=development

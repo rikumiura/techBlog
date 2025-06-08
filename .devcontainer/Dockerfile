@@ -1,28 +1,26 @@
-# # ベースイメージとしてNode.jsを使用
-# FROM node:22-slim
-
-# # 作業ディレクトリを設定
-# WORKDIR /workspace
-
-# # package.jsonとpnpm-lock.yamlのみを先にコピー
-# # これにより、依存関係が変更されない限りキャッシュが使われる
-# COPY workspace/package.json ./
-# COPY workspace/pnpm-lock.yaml ./
-
-# # pnpmをインストールし、依存関係をインストール
-# RUN npm install -g pnpm && \
-#     pnpm install --frozen-lockfile && \
-#     pnpm store prune
-
-# # 不要なファイルをクリーンアップ
-# RUN npm cache clean --force
-
-# # コンテナを起動し続けるためのコマンド
-# CMD ["tail", "-f", "/dev/null"]
-
-
-
+# ベースイメージとしてNode.jsを使用
 FROM node:22-slim
+
+# 必要なパッケージをインストール
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    procps \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# pnpmをグローバルにインストール
+RUN npm install -g pnpm@latest
+
+# 作業ディレクトリを設定
 WORKDIR /workspace
-# 依存関係のインストールを一時的にスキップ
-CMD ["tail", "-f", "/dev/null"]
+
+# nodeユーザーに権限を付与
+RUN chown -R node:node /workspace
+
+# nodeユーザーに切り替え
+USER node
+
+# コンテナを起動し続けるためのコマンド（何もインストールしない）
+# CMD ["pnpm --workdir workspace" "run" "dev"]
